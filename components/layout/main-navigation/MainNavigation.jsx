@@ -1,7 +1,15 @@
 import Link from "next/link";
 import classes from "./main-navigation.module.css";
+import {useSession} from "next-auth/client";
+import {signOut} from "next-auth/client";
 
 const MainNavigation = () => {
+    const [session, loading] = useSession();
+
+    const logoutHandler = async () => {
+        await signOut();
+    }
+
     return (
         <header className={classes.header}>
             <Link href='/'>
@@ -11,15 +19,9 @@ const MainNavigation = () => {
             </Link>
             <nav>
                 <ul>
-                    <li>
-                        <Link href='/auth'>Login</Link>
-                    </li>
-                    <li>
-                        <Link href='/profile'>Profile</Link>
-                    </li>
-                    <li>
-                        <button>Logout</button>
-                    </li>
+                    {!session && !loading && <li><Link href='/auth'>Login</Link></li> }
+                    {session && <li><Link href='/profile'>Profile</Link></li> }
+                    {session && <li><button onClick={logoutHandler}>Logout</button></li> }
                 </ul>
             </nav>
         </header>

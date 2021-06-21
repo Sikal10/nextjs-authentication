@@ -1,9 +1,11 @@
 import UserProfile from "../../components/profile/UserProfile/UserProfile";
+import {getSession} from "next-auth/client";
 
-const Profile = () => {
+const ProfilePage = () => {
     return (
         <UserProfile />
     );
 };
 
-export default Profile;
+
+export default ProfilePage;
