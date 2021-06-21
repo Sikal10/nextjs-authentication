@@ -5,7 +5,7 @@ connectDB();
 
 const handler = async (req, res) => {
     if (req.method === "POST") {
-        const {name, email, password} = req.body;
+        const { email, password} = req.body;
 
         //check if user exists
         const existingUser = await User.findOne({email});
@@ -14,7 +14,7 @@ const handler = async (req, res) => {
         }
 
         //create a user
-        const user = await User.create({name, email, password});
+        const user = await User.create({email, password});
 
         if (user) {
             return res.json({
@@ -22,6 +22,8 @@ const handler = async (req, res) => {
                 data: user,
                 message: "user created successfully"
             })
+        } else {
+            throw new Error("Invalid credentials.")
         }
     }
 }
