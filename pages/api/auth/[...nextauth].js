@@ -13,15 +13,16 @@ export default NextAuth({
         Providers.Credentials({
             async authorize(credentials) {
                 const {email, password} = credentials;
+
                 const user = await User.findOne({email});
                 if (!user) throw new Error("No user found!");
 
-                const isPasswordValid = user.matchPassword(password);
+                const isPasswordValid = await user.matchPassword(password);
                 if (!isPasswordValid) {
-                    throw new Error("Could not log you in.")
+                    throw new Error("Incorrect Password!");
                 }
 
-                return {email: user.email}
+                return {email: user.email};
 
             }
         })

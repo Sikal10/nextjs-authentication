@@ -1,13 +1,17 @@
 import {useState} from 'react';
 import classes from "./auth-form.module.css";
-import {createUser, loginUser} from "../../helpers/auth";
+import {createUser} from "../../helpers/auth";
 import {signIn} from "next-auth/client";
 import {useRouter} from "next/router";
+import Notification from "../../ui/notification/Notification";
 
 const AuthForm = () => {
     const [isLogin, setIsLogin] = useState(true);
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [requestStatus, setRequestStatus] = useState("");
+    const [requestMessage, setRequestMessage] = useState("");
+    const [requestError, setRequestError] = useState("");
 
     const router = useRouter();
 
@@ -17,6 +21,9 @@ const AuthForm = () => {
 
     const submitHandler = async (e) => {
         e.preventDefault();
+
+        setRequestStatus("pending")
+
         if (isLogin) {
             const result = await signIn("credentials", {
                 redirect: false,
@@ -30,13 +37,43 @@ const AuthForm = () => {
         } else {
             try {
                 const response = await createUser(email, password);
-                console.log(response)
-            } catch (err) {
-                console.log(err)
-            }
+                console.log(response);
+                setRequestStatus("success");
+                setRequestMessage(response.message);
+                setEmail("");
+                setPassword("");
 
+            } catch (err) {
+                console.log(err);
+                setRequestStatus("error");
+                setRequestError(err.message);
+            }
         }
     }
+
+    let notification;
+
+    if (requestStatus === "pending") {
+        notification = {
+            status: "pending"
+        }
+    }
+
+    if (requestStatus === "success") {
+        notification = {
+            status: "success",
+            message: requestMessage
+        }
+    }
+
+    if (requestStatus === "error") {
+        notification = {
+            status: "error",
+            message: requestError
+        }
+    }
+
+
 
     return (
         <section className={classes.auth}>
@@ -63,6 +100,8 @@ const AuthForm = () => {
                     </button>
                 </div>
             </form>
+
+            {notification && <Notification status={notification.status} message={notification.message} />}
         </section>
 
     );
