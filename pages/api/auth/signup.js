@@ -23,7 +23,9 @@ const handler = async (req, res) => {
                 message: "user created successfully"
             })
         } else {
-            throw new Error("Invalid credentials.")
+            const error = new Error("Invalid credentials");
+            error.code = 422;
+            throw error;
         }
     }
 }

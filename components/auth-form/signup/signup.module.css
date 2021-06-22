@@ -1,0 +1,54 @@
+.signup {
+    margin: 3rem auto;
+    background: #383636;
+    padding: 1rem;
+    text-align: center;
+    max-width: 25rem;
+    width: 100%;
+    border-radius: 5px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+}
+
+.signup h1 {
+    color: #fff;
+    text-align: center;
+}
+
+.control {
+    margin-bottom: 8px;
+}
+
+.control label {
+    color: white;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+    display: block;
+}
+
+.control input {
+    outline: none;
+    width: 100%;
+    border-radius: 4px;
+    padding:.3rem;
+    background: whitesmoke;
+    font-size: 1rem;
+}
+
+.button {
+    margin-top: 10px;
+    cursor: pointer;
+    font: inherit;
+    color: white;
+    background-color: #222;
+    border: 1px solid #222;
+    border-radius: 4px;
+    padding: 0.5rem 2.5rem;
+    font-weight: bold;
+}
+
+.button:hover {
+    background-color: #fff;
+    color: #222;
+    border: 1px solid #fff;
+    font-weight: normal;
+}

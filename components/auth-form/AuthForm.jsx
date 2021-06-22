@@ -9,20 +9,18 @@ const AuthForm = () => {
     const [isLogin, setIsLogin] = useState(true);
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [requestStatus, setRequestStatus] = useState("");
-    const [requestMessage, setRequestMessage] = useState("");
-    const [requestError, setRequestError] = useState("");
 
     const router = useRouter();
 
-    const switchAuthModeHandler = () => {
+    const switchAuthModeHandler = async () => {
+        if (isLogin) {
+            await router.push("/auth/signup")
+        }
         setIsLogin((prevState) => !prevState);
     }
 
     const submitHandler = async (e) => {
         e.preventDefault();
-
-        setRequestStatus("pending")
 
         if (isLogin) {
             const result = await signIn("credentials", {
@@ -33,47 +31,8 @@ const AuthForm = () => {
             if (!result.error) {
                 await router.replace("/profile")
             }
-            console.log(result);
-        } else {
-            try {
-                const response = await createUser(email, password);
-                console.log(response);
-                setRequestStatus("success");
-                setRequestMessage(response.message);
-                setEmail("");
-                setPassword("");
-
-            } catch (err) {
-                console.log(err);
-                setRequestStatus("error");
-                setRequestError(err.message);
-            }
         }
     }
-
-    let notification;
-
-    if (requestStatus === "pending") {
-        notification = {
-            status: "pending"
-        }
-    }
-
-    if (requestStatus === "success") {
-        notification = {
-            status: "success",
-            message: requestMessage
-        }
-    }
-
-    if (requestStatus === "error") {
-        notification = {
-            status: "error",
-            message: requestError
-        }
-    }
-
-
 
     return (
         <section className={classes.auth}>
@@ -90,18 +49,17 @@ const AuthForm = () => {
                            required/>
                 </div>
                 <div className={classes.actions}>
-                    <button>{isLogin ? 'Login' : 'Create Account'}</button>
+                    <button>Login</button>
                     <button
                         type='button'
                         className={classes.toggle}
                         onClick={switchAuthModeHandler}
                     >
-                        {isLogin ? 'Create new account' : 'Login with existing account'}
+                        {isLogin && 'Create new account'}
                     </button>
                 </div>
             </form>
 
-            {notification && <Notification status={notification.status} message={notification.message} />}
         </section>
 
     );

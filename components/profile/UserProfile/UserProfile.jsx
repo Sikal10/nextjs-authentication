@@ -1,7 +1,6 @@
 import ProfileForm from "../ProfileForm/ProfileForm";
 import classes from "./user-profile.module.css";
 import axios from "axios";
-import Notification from "../../../ui/notification/Notification";
 
 const UserProfile = () => {
     const config = {
@@ -17,9 +16,8 @@ const UserProfile = () => {
 
     return (
         <section className={classes.profile}>
-            <h1>Your User Profile</h1>
+            <h1>Your Profile</h1>
             <ProfileForm onChangePassword={changePasswordHandler} />
-            {<Notification />}
         </section>
     );
 };
