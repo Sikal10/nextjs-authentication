@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import classes from "./signup.module.css";
 import {createUser} from "../../../helpers/auth";
 import {useRouter} from "next/router";
@@ -13,19 +13,30 @@ const SignupForm = () => {
     const [requestStatus, setRequestStatus] = useState("");
     const [requestMessage, setRequestMessage] = useState("");
 
-    const router = useRouter();
+    const router = useRouter()
+
+    useEffect(() => {
+        if (requestStatus === "success" || requestStatus === "error") {
+            const timer = setTimeout(() => {
+                setRequestStatus(null);
+                setRequestMessage(null);
+            }, 3000);
+
+            return () => clearTimeout(timer);
+        }
+    }, [requestStatus]);
 
     const signupHandler = async (e) => {
         e.preventDefault();
         if (password !== confirmPassword) {
             setPassword("");
             setConfirmPassword("");
-            const error = new Error("Passwords do not match");
-            error.code = 400
-            throw error;
+            alert("Passwords do not match!")
+            return;
         }
 
-        setRequestStatus("pending")
+        setRequestStatus("pending");
+
         try {
             const user = await createUser(name, email, password);
             setRequestStatus("success");
@@ -88,6 +99,7 @@ const SignupForm = () => {
             </form>
 
             {notification && <Notification status={notification.status} message={notification.message} />}
+
         </section>
     );
 };
